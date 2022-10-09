@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:untitled/config/palette.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import '../main.dart';
 
 class LoginSignupScreen extends StatefulWidget {
   const LoginSignupScreen({Key? key}) : super(key: key);
@@ -9,22 +12,20 @@ class LoginSignupScreen extends StatefulWidget {
 }
 
 class _LoginSignupScreenState extends State<LoginSignupScreen> {
+  final _authentication = FirebaseAuth.instance;
+
   bool isSignupScreen = true;
   final _formKey = GlobalKey<FormState>();
   String userName = '';
   String userEmail = '';
   String userPassword = '';
+
   void _tryValidation() {
-    // validation을 모든 텍스폼필드 validation을 작동시킬 수 있다.
     final isValid = _formKey.currentState!.validate();
     if (isValid) {
-      // formstate 유효할 경우에 한해서 폼 전체의 state값을 저장하게 됨
       _formKey.currentState!.save();
     }
   }
-
-  // TODO: 사용자가 다음 버튼을 눌렀을 때 폼에 유효성 검사에 문제가 없을 경우
-  // TODO: validator가 null을 리턴하고, Value값을 가져와서 validation 기능을 실행 해야 한다.
 
   @override
   Widget build(BuildContext context) {
@@ -47,76 +48,60 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      // RichText(
-                      //   text: TextSpan(
-                      //     text: '배달을 반하다 ',
-                      //     style: const TextStyle(
-                      //       letterSpacing: 0.1,
-                      //       fontSize: 30,
-                      //       color: Colors.black,
-                      //       fontWeight: FontWeight.bold,
-                      //     ),
-                      //     children: [
-                      //       TextSpan(
-                      //         text: isSignupScreen ? '회원가입' : '시작하기 ',
-                      //         style: const TextStyle(
-                      //           letterSpacing: 0.1,
-                      //           fontSize: 28,
-                      //           color: Colors.black38,
-                      //           //fontWeight: FontWeight.bold,
-                      //         ),
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
                       Container(
                         height: 110,
                         width: 110,
                         decoration: const BoxDecoration(
                           image: DecorationImage(
-                              image: AssetImage('img/logo.png'),
+                              image: AssetImage('image/logo.png'),
                               fit: BoxFit.fill),
                         ),
                       ),
-                      // const SizedBox(
-                      //   height: 15.0,
-                      // ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Text(
-                            "배달비 걱정 없는 배달비 공유 플랫폼",
+                // const SizedBox(
+                //   height: 15.0,
+                // ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text(
+                          "배달비 걱정 없는 배달비 공유 플랫폼",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text("배달비와 최소주문금액 걱정없이 지금 시작하세요.",
                             style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text("배달비와 최소주문금액 걱정없이 지금 시작하세요.",
-                              style: TextStyle(
-                                  fontSize: 15, color: Colors.black87))
-                        ],
+                                fontSize: 15, color: Colors.black87))
+                      ],
+                    ),
+                    Text(
+                      isSignupScreen
+                          ? 'Signup to continue'
+                          : 'Signin to continue',
+                      style: TextStyle(
+                        letterSpacing: 1.0,
+                        color: Colors.white,
                       ),
-                      const SizedBox(
-                        height: 10.0,
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
+          ),
             //배경
             AnimatedPositioned(
-              duration: const Duration(milliseconds: 300),
+              duration: Duration(milliseconds: 300),
               curve: Curves.easeIn,
               top: 250,
               child: AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
+                duration: Duration(milliseconds: 300),
                 curve: Curves.easeIn,
-                padding: const EdgeInsets.all(20.0),
+                padding: EdgeInsets.all(20.0),
                 height: isSignupScreen ? 320.0 : 260.0,
                 width: MediaQuery.of(context).size.width - 40,
-                margin: const EdgeInsets.symmetric(horizontal: 20.0),
+                margin: EdgeInsets.symmetric(horizontal: 20.0),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(15.0),
@@ -128,6 +113,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                   ],
                 ),
                 child: SingleChildScrollView(
+                  //padding: EdgeInsets.only(bottom: 20),
                   child: Column(
                     children: [
                       Row(
@@ -150,12 +136,12 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                           ? Colors.black
                                           : Colors.black54),
                                 ),
-                                if (!isSignupScreen)
+                                if (!isSignupScreen) //회원가입 기능
                                   Container(
-                                    margin: const EdgeInsets.only(top: 3),
+                                    margin: EdgeInsets.only(top: 3),
                                     height: 2,
                                     width: 55,
-                                    color: Colors.black,
+                                    color: Colors.redAccent,
                                   )
                               ],
                             ),
@@ -179,36 +165,45 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                 ),
                                 if (isSignupScreen)
                                   Container(
-                                    margin: const EdgeInsets.only(top: 3),
+                                    margin: EdgeInsets.only(top: 3),
                                     height: 2,
                                     width: 55,
-                                    color: Colors.black,
+                                    color: Colors.redAccent,
                                   )
                               ],
                             ),
                           )
                         ],
                       ),
-                      if (isSignupScreen) // 회원가입 폼 필드
+                      if (isSignupScreen)
                         Container(
-                          margin: const EdgeInsets.only(top: 20),
+                          margin: EdgeInsets.only(top: 20),
                           child: Form(
                             key: _formKey,
                             child: Column(
                               children: [
                                 TextFormField(
-                                  key: const ValueKey(1),
+                                  key: ValueKey(1),
                                   validator: (value) {
                                     if (value!.isEmpty || value.length < 4) {
-                                      return "4글자 이상 입력해주세요";
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content:
+                                          Text('닉네임은 4글자 이상입니다. 확인해주세요'),
+                                          duration: Duration(seconds: 1),
+                                          backgroundColor: Colors.redAccent,
+                                        ),
+                                      );
                                     }
                                     return null;
                                   },
                                   onSaved: (value) {
-                                    //userName 변수는 onSaved 메소드 내에서 밸류값이 전달 될때 마다 업데이트
                                     userName = value!;
                                   },
-                                  decoration: const InputDecoration(
+                                  onChanged: (value) {
+                                    userName = value;
+                                  },
+                                  decoration: InputDecoration(
                                       prefixIcon: Icon(
                                         Icons.account_circle,
                                         color: Palette.iconColor,
@@ -233,24 +228,32 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                           color: Palette.textColor1),
                                       contentPadding: EdgeInsets.all(10)),
                                 ),
-                                const SizedBox(
+                                SizedBox(
                                   height: 8,
                                 ),
                                 TextFormField(
-                                  key: const ValueKey(2),
+                                  keyboardType: TextInputType.emailAddress,
+                                  key: ValueKey(2),
                                   validator: (value) {
-                                    if (value!.isEmpty ||
-                                        !value.contains('@')) {
-                                      // @이 포함되었는지 안되었느지
-                                      return "이메일 칸에 '@' 를 포함 해주세요";
+                                    if (value!.isEmpty || !value.contains('@')) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content:
+                                          Text('이메일을 확인해주세요'),
+                                          duration: Duration(seconds: 1),
+                                          backgroundColor: Colors.redAccent,
+                                        ),
+                                      );
                                     }
                                     return null;
                                   },
                                   onSaved: (value) {
-                                    //userName 변수는 onSaved 메소드 내에서 밸류값이 전달 될때 마다 업데이트
                                     userEmail = value!;
                                   },
-                                  decoration: const InputDecoration(
+                                  onChanged: (value) {
+                                    userEmail = value;
+                                  },
+                                  decoration: InputDecoration(
                                       prefixIcon: Icon(
                                         Icons.email,
                                         color: Palette.iconColor,
@@ -275,23 +278,32 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                           color: Palette.textColor1),
                                       contentPadding: EdgeInsets.all(10)),
                                 ),
-                                const SizedBox(
+                                SizedBox(
                                   height: 8,
                                 ),
                                 TextFormField(
-                                  // 비밀번호 6자리는 firebase애 6자리가 최소 숫자
-                                  key: const ValueKey(3),
+                                  obscureText: true,
+                                  key: ValueKey(3),
                                   validator: (value) {
                                     if (value!.isEmpty || value.length < 6) {
-                                      return "비밀번호는 6자리 이상 입력해 주십시요";
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content:
+                                          Text('비밀번호는 7자 이상 입력해주세요'),
+                                          duration: Duration(seconds: 1),
+                                          backgroundColor: Colors.redAccent,
+                                        ),
+                                      );
                                     }
                                     return null;
                                   },
                                   onSaved: (value) {
-                                    //userName 변수는 onSaved 메소드 내에서 밸류값이 전달 될때 마다 업데이트
                                     userPassword = value!;
                                   },
-                                  decoration: const InputDecoration(
+                                  onChanged: (value) {
+                                    userPassword = value;
+                                  },
+                                  decoration: InputDecoration(
                                       prefixIcon: Icon(
                                         Icons.lock,
                                         color: Palette.iconColor,
@@ -320,26 +332,36 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                             ),
                           ),
                         ),
-                      if (!isSignupScreen) // 로그인 텍스트폼 필드
+                      if (!isSignupScreen) /////////////////////////////////////////////////////////////////////////////////////////////////////로그인
                         Container(
-                          margin: const EdgeInsets.only(top: 20),
+                          margin: EdgeInsets.only(top: 20),
                           child: Form(
                             key: _formKey,
                             child: Column(
                               children: [
                                 TextFormField(
-                                  key: const ValueKey(4),
+                                  key: ValueKey(4),
                                   validator: (value) {
-                                    if (value!.isEmpty || value.contains('@')) {
-                                      return "이메일에서 @이 발견되지 않았습니다.";
+                                    if (value!.isEmpty ||
+                                        !value.contains('@')) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content:
+                                          Text('이메일을 확인해주세요'),
+                                          duration: Duration(seconds: 1),
+                                          backgroundColor: Colors.redAccent,
+                                        ),
+                                      );
                                     }
                                     return null;
                                   },
                                   onSaved: (value) {
-                                    //userName 변수는 onSaved 메소드 내에서 밸류값이 전달 될때 마다 업데이트
                                     userEmail = value!;
                                   },
-                                  decoration: const InputDecoration(
+                                  onChanged: (value) {
+                                    userEmail = value;
+                                  },
+                                  decoration: InputDecoration(
                                       prefixIcon: Icon(
                                         Icons.email,
                                         color: Palette.iconColor,
@@ -364,22 +386,32 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                           color: Palette.textColor1),
                                       contentPadding: EdgeInsets.all(10)),
                                 ),
-                                const SizedBox(
+                                SizedBox(
                                   height: 8.0,
                                 ),
                                 TextFormField(
-                                  key: const ValueKey(5),
-                                  onSaved: (value) {
-                                    //userName 변수는 onSaved 메소드 내에서 밸류값이 전달 될때 마다 업데이트
-                                    userPassword = value!;
-                                  },
+                                  obscureText: true,
+                                  key: ValueKey(5),
                                   validator: (value) {
                                     if (value!.isEmpty || value.length < 6) {
-                                      return "비밀번호는 6자리 이상입니다.";
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content:
+                                          Text('비밀번호를 확인해주세요'),
+                                          duration: Duration(seconds: 1),
+                                          backgroundColor: Colors.redAccent,
+                                        ),
+                                      );
                                     }
                                     return null;
                                   },
-                                  decoration: const InputDecoration(
+                                  onSaved: (value) {
+                                    userPassword = value!;
+                                  },
+                                  onChanged: (value) {
+                                    userPassword = value;
+                                  },
+                                  decoration: InputDecoration(
                                       prefixIcon: Icon(
                                         Icons.lock,
                                         color: Palette.iconColor,
@@ -415,27 +447,79 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
             ),
             //텍스트 폼 필드
             AnimatedPositioned(
-              duration: const Duration(milliseconds: 300),
+              duration: Duration(milliseconds: 300),
               curve: Curves.easeIn,
               top: isSignupScreen ? 485 : 425,
               right: 0,
               left: 0,
               child: Center(
                 child: Container(
-                  padding: const EdgeInsets.all(15),
+                  padding: EdgeInsets.all(15),
                   height: 75,
                   width: 300,
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(50)),
                   child: GestureDetector(
-                    onTap: () {
-                      _tryValidation();
+                    onTap: () async {
+                      if (isSignupScreen) {
+                        _tryValidation();
+                        try {
+                          final newUser = await _authentication
+                              .createUserWithEmailAndPassword(
+                            email: userEmail,
+                            password: userPassword,
+                          );
+                          if (newUser.user != null) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return MyApp();
+                                },
+                              ),
+                            );
+                          }
+                        } catch (e) {
+                          print(e);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content:
+                              Text('알림: 중복되는 닉네임 이거나 가입된 아이디 입니다.', style: TextStyle(fontSize: 15),),
+                              backgroundColor: Colors.redAccent,
+                            ),
+                          );
+                        }
+                      }
+
+                      if (!isSignupScreen) { // 로그인 기능
+                        _tryValidation();
+                        try {
+                          final newUser =
+                          await _authentication.signInWithEmailAndPassword(
+                            email: userEmail,
+                            password: userPassword,
+                          );
+
+                          if (newUser.user != null) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return MyApp();
+                                },
+                              ),
+                            );
+                          }
+                        }catch(e){
+                          print(e);
+                        }
+                      }
                     },
                     child: Container(
                       decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                            colors: [Colors.blue, Colors.blueAccent],
+                        gradient: LinearGradient(
+                            colors: [Colors.red, Colors.redAccent],
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight),
                         borderRadius: BorderRadius.circular(40),
@@ -444,26 +528,13 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                             color: Colors.black.withOpacity(0.3),
                             spreadRadius: 1,
                             blurRadius: 1,
-                            offset: const Offset(0, 1),
+                            offset: Offset(0, 1),
                           ),
                         ],
                       ),
-                      child: TextButton.icon(
-                        onPressed: () {},
-                        style: TextButton.styleFrom(
-                            foregroundColor: Colors.white,
-                            minimumSize: const Size(155, 40),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)),
-                            backgroundColor: Colors.red),
-                        label: const Text(
-                          '계속하기',
-                          style: TextStyle(fontSize: 15),
-                        ),
-                        icon: const Icon(
-                          Icons.play_arrow_rounded,
-                          size: 0,
-                        ),
+                      child: Icon(
+                        Icons.arrow_forward,
+                        color: Colors.white,
                       ),
                     ),
                   ),
@@ -475,41 +546,41 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
               duration: Duration(milliseconds: 300),
               curve: Curves.easeIn,
               top: isSignupScreen
-                  ? MediaQuery.of(context).size.height - 120
-                  : MediaQuery.of(context).size.height - 180,
+                  ? MediaQuery.of(context).size.height - 200
+                  : MediaQuery.of(context).size.height - 260,
               right: 0,
               left: 0,
               child: Column(
                 children: [
-                  const Text(
+                   Text(
                     'or',
                     style: TextStyle(fontSize: 15),
                   ),
-                  const SizedBox(
-                    height: 5,
+                   SizedBox(
+                    height: 10,
                   ),
-                  const Text(
+                   Text(
                     '다음 계정으로 계속하기',
                     style: TextStyle(fontSize: 12),
                   ),
-                  const SizedBox(
+                  SizedBox(
                     height: 10,
                   ),
                   TextButton.icon(
                     onPressed: () {},
                     style: TextButton.styleFrom(
                         foregroundColor: Colors.white,
-                        minimumSize: const Size(155, 40),
+                        minimumSize: Size(155, 40),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20)),
                         backgroundColor: Colors.red),
-                    icon: const Icon(Icons.add, size: 0),
-                    label: const Text('Google'),
+                    icon: Icon(Icons.add, size: 0),
+                    label: Text('Google'),
                   ),
                 ],
               ),
             ),
-            //구글
+            //구글 로그인 버튼
           ],
         ),
       ),
