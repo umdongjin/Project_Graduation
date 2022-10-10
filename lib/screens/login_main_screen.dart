@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../main.dart';
 
 class LoginSignupScreen extends StatefulWidget {
-  const LoginSignupScreen({Key? key}) : super(key: key);
+  LoginSignupScreen({Key? key}) : super(key: key);
 
   @override
   _LoginSignupScreenState createState() => _LoginSignupScreenState();
@@ -44,25 +44,25 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
               child: SizedBox(
                 height: 300,
                 child: Container(
-                  padding: const EdgeInsets.only(top: 50),
+                  padding: EdgeInsets.only(top: 50),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
                         height: 110,
                         width: 110,
-                        decoration: const BoxDecoration(
+                        decoration:  BoxDecoration(
                           image: DecorationImage(
                               image: AssetImage('image/logo.png'),
                               fit: BoxFit.fill),
                         ),
                       ),
-                // const SizedBox(
+                //  SizedBox(
                 //   height: 15.0,
                 // ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
+                      children: [
                         Text(
                           "배달비 걱정 없는 배달비 공유 플랫폼",
                           style: TextStyle(
